@@ -1,0 +1,25 @@
+name: Build APK
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip project
+        run: unzip -q -o joma-khoroch-app.zip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Build
+        run: bash joma-khoroch-app/build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JomaKhoroch-APK
+          path: joma-khoroch-app/out/*.apk
